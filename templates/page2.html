@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cab Affairs</title>
+        <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <nav class="navbar">
+            <h1>Cab Affairs</h1>
+            <ul>
+                <li><a href="/">Home</a> </li>
+                <li><a href="/booking" , id="active-page">Booked</a> </li>
+                <li><a href="/aboutme"> About Me</a></li>
+            </ul>
+        </nav>
+        <h1 style="margin: 50px;">BOOKED CABS TYPES:</h1>
+        <div class="container">
+            <div class="card" id="mini" onclick="getCabs('Mini')">Mini</div>
+            <div class="card" id="sports"
+                onclick="getCabs('Sports')">Sports</div>
+            <div class="card" id="suv" onclick="getCabs('SUV')">SUV</div>
+            <div class="card" id="sedan" onclick="getCabs('Sedan')">Sedan</div>
+        </div>
+        <h1 style="margin: 50px;">BOOKED CABS:</h1>
+        <main>
+            <div
+                style="margin: 0px; display: flex; justify-content: space-evenly;">
+                <h2>Car license Number</h2>
+                <h2>Car Name</h2>
+                <h2>Type of Car</h2>
+                <h2>Start DateTime</h2>
+                <h2>Stop DateTime</h2>
+            </div>
+            <div style="height: 20px;"></div>
+            <div id="cabList">
+                {% if cabs %}
+
+                {% for cab in cabs %}
+                <div class="carlist" id="car-{{ cab[0] }}">
+                    <div class="details">
+                        <h3>{{ cab[0] }}</h3>
+                        <p>{{ cab[1] }}</p>
+                        <p>{{ cab[2] }}</p>
+                        <p>Start Time: {{ cab[3] }}</p>
+                        <p>Stop Time: {{ cab[4] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                
+                <h3 class="out">No records found.</h3>
+                {% endif %}
+            </div>
+        </main>
+
+        <script>
+        function clearCards() {
+            var cabListDiv = document.getElementById("cabList");
+            cabListDiv.innerHTML = ""; // Clear all child elements
+        }
+        function formatTime(epochTime) {
+            var date = new Date(epochTime * 1000);
+            var formattedDate = date.toLocaleString();
+            return formattedDate;
+        }
+
+        function getCabs(carType) {
+            clearCards(); 
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/get_cabs?type="+carType, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.cabs.length > 0) {
+                        var cabListDiv = document.getElementById("cabList");
+                        response.cabs.forEach(function(cab) {
+                            var cardDiv = document.createElement("div");
+                            cardDiv.classList.add("carlist");
+                            cardDiv.id = "car-" + cab[0];
+                            cardDiv.addEventListener("click", function() {
+                            window.location.href = "/car_details?lic=" + cab[0];
+                        });
+                            var detailsDiv = document.createElement("div");
+                            detailsDiv.classList.add("details");
+                            var h3 = document.createElement("h3");
+                            h3.textContent = cab[0];
+                            var p1 = document.createElement("p");
+                            p1.textContent = cab[1];
+                            var p2 = document.createElement("p");
+                            p2.textContent = cab[2];
+                            var p3 = document.createElement("p");
+                            p3.textContent = "" + formatTime(cab[3]);
+                            var p4 = document.createElement("p");
+                            p4.textContent = "" + formatTime(cab[4]);
+                            detailsDiv.appendChild(h3);
+                            detailsDiv.appendChild(p1);
+                            detailsDiv.appendChild(p2);
+                            detailsDiv.appendChild(p3);
+                            detailsDiv.appendChild(p4);
+                            cardDiv.appendChild(detailsDiv);
+                            cabListDiv.appendChild(cardDiv);
+                        });
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+    </body>
+</html>

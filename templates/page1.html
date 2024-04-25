@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cab Affairs</title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Cab Affairs</h1>
+        <ul>
+            <li><a href="/" , id="active-page">Home</a></li>
+            <li><a href="/booking">Booked</a></li>
+            <li><a href="/aboutme">About Me</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Car Details Form</h1>
+        <form action="/cardata" id="carForm" method="post">
+            <label for="carType"><h2>Car Type:</h2></label>
+            <select id="carType" name="carType">
+                <option value="Sedan">Sedan</option>
+                <option value="Sports">Sports</option>
+                <option value="SUV">SUV</option>
+                <option value="Mini">Mini</option>
+            </select>
+            <div class="spacer" style="height: 20px;"></div>
+            <div class="input-time">
+                <label for="startTime"><h3>Starting datetime:</h3></label>
+                <input type="datetime-local" id="startTime" name="startTime" required>
+                <label for="stopTime"><h3>Stopping datetime:</h3></label>
+                <input type="datetime-local" id="stopTime" name="stopTime" required>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+        <div style="height: 50px;"></div>
+        {% if cars %}
+            <h1>AVAILABLE CARS</h1>
+            <div style="height: 20px;"></div>
+            <div style="margin: 0px; display: flex; justify-content: space-evenly;">
+                <h2>Car license Number</h2>
+                <h2>Car Name</h2>
+                <h2>Type of Car</h2>
+            </div>
+            <div style="height: 20px;"></div>
+            {% for car in cars %}
+                <div class="carlist" id="car-{{ car[0] }}">
+                    <div class="details" onclick="updateStartTime('{{ car[0] }}')">
+                        <h3>{{ car[0] }}</h3>
+                        <p>{{ car[1] }}</p>
+                        <p>{{ car[2] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3 class="out">No records found.</h3>
+        {% endif %}
+        <div id="rideBookedText" style="display: none;">
+            <h1>Ride Booked</h1>
+        </div>
+    </main>
+    <script>
+        function updateStartTime(licno) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/update_starttime?licno=" + licno, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        document.getElementById('rideBookedText').style.display = 'block';
+                        // Remove the booked car from the list
+                        var carElement = document.getElementById('car-' + licno);
+                        carElement.parentNode.removeChild(carElement);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

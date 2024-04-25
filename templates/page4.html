@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cab Affairs</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='extra.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+
+        <a href="/booking" class="back-button">Back</a>
+
+    </nav>
+
+    <main>
+
+        <div>
+
+            {% if car_data %}
+
+            <h2>License Number: <span>{{ car_data[0] }}</span></h2>
+
+            <p>Car Name: <span>{{ car_data[1] }}</span></p>
+
+            <p>Type of Car: <span>{{ car_data[2] }}</span></p>
+
+            <p>Mobile Number: <span>{{ car_data[3] }}</span></p>
+
+            <p>Aadhar Card Number: <span>{{ car_data[4] }}</span></p>
+
+            <p>Site Pay: <span>{{ car_data[5] }}</span></p>
+
+            <p>License Expiry: <span id="license_expiry"></span></p>
+
+            <p>Insurance Expiry: <span id="insurance_expiry"></span></p>
+
+            <p>Rating: <span>{{ car_data[8] }}</span></p>
+
+            <p>Gender: <span>{{ car_data[9] }}</span></p>
+
+            <p>Age: <span>{{ car_data[10] }}</span></p>
+
+            <p>Driver Name: <span>{{ car_data[11] }}</span></p>
+
+            <p>State: <span>{{ car_data[12] }}</span></p>
+
+            {% else %}
+
+            <p>No car data available</p>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var car_data = JSON.parse('{{ car_data | tojson | safe }}');
+
+
+            if (car_data) {
+
+                var licenseExpiry = new Date(car_data[6] * 1000);
+
+                var insuranceExpiry = new Date(car_data[7] * 1000);
+
+
+                document.getElementById('license_expiry').textContent = licenseExpiry.toLocaleString();
+
+                document.getElementById('insurance_expiry').textContent = insuranceExpiry.toLocaleString();
+
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>

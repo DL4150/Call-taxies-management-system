@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cab Affairs</title>
+        <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='aboutme.css') }}">
+    </head>
+    <body>
+        <nav class="navbar">
+            <h1>Cab Affairs</h1>
+            <ul>
+                <li><a href="/">Home</a> </li>
+                <li><a href="/booking" , id="active-page">Booked</a> </li>
+                <li><a href="/aboutme"> About Me</a></li>
+            </ul>
+        </nav>
+
+        <h1 style="margin: 50px; display: flex; justify-content: center;">About
+            Me</h1>
+        <div class="container">
+            <div class="content">
+                <img src="{{ url_for('static', filename='d.jpg') }}">
+                <!-- put ur stuff here -->
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>About Daniel Lawrence</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 20px;
+                        }
+                        h1 {
+                            color: #333;
+                            text-align: center;
+                            margin-bottom: 20px; /* Added margin bottom */
+                        }
+                        p {
+                            margin-bottom: 15px;
+                            line-height: 1.6;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Daniel Lawrence</h1>
+                    <p>
+                        My name is Daniel Lawrence. I am experienced in conducting in-depth analyses and utilizing statistical models to derive actionable insights. Proficient in programming languages such as Python and R, I have expertise in data manipulation, visualization, and machine learning.
+                    </p>
+                    <p>
+                        I possess excellent communication skills and a proven ability to present complex findings in a clear and compelling manner. I am committed to driving data-informed decision-making and contributing to the field of data science. Moreover, I am committed to continuous learning and staying up-to-date with the latest industry trends.
+                    </p>
+                    <p>
+                        I am seeking opportunities to contribute my skills and expertise to drive impactful outcomes in the field of data science.
+                    </p>
+                </body>
+</html>
